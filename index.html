@@ -3,16 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
-      <script src="https://cdn.tailwindcss.com"></script>
+    <title>AI Coding Buddy - Stay Accountable</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1 class=" font-bold">This is my AI BUDDY</h1>
+<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-black min-h-screen flex items-center justify-center p-6">
+    
+    <div class="max-w-2xl w-full bg-gray-800 border border-green-500/30 rounded-2xl shadow-2xl shadow-green-500/20 p-8 space-y-8">
+        
+        <!-- Header -->
+        <div class="text-center space-y-2">
+            <h1 class="text-4xl font-bold text-green-400">🤖 Your AI Coding Buddy</h1>
+            <p class="text-gray-400">I'll bug you until you code. You're welcome! 😄</p>
+        </div>
 
-    <button type="button" id="notify-btn" class="bg-blue-700 hover:bg-blue-400 text-white font-semibold px-4 py-4 rounded-lg">Notify ME</button>
-    <button type="button" id="done-btn" class="bg-violet-700 hover:bg-blue-400 text-white font-semibold px-4 py-4 rounded-lg">DONE! I Coded Today 🎉</button>
+        <!-- Streak Display -->
+        <div class="bg-gradient-to-r from-green-900/50 to-emerald-900/50 border border-green-500/30 rounded-xl p-6 text-center">
+            <p class="text-sm text-gray-400 mb-2">Current Streak</p>
+            <p id="streak-display" class="text-3xl font-bold text-green-400">
+                Start your streak today!
+            </p>
+        </div>
 
+        <!-- Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <button 
+                type="button" 
+                id="notify-btn" 
+                class="bg-green-600 hover:bg-green-500 text-black font-semibold px-6 py-4 rounded-lg shadow-lg shadow-green-500/30 transition-all transform hover:scale-105 active:scale-95">
+                📢 Remind Me Now
+            </button>
+            
+            <button 
+                type="button" 
+                id="done-btn" 
+                class="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-black font-semibold px-6 py-4 rounded-lg shadow-lg shadow-emerald-500/30 transition-all transform hover:scale-105 active:scale-95">
+                ✅ Done! I Coded Today
+            </button>
+        </div>
+
+        <!-- Info Section -->
+        <div class="bg-gray-900/50 border border-green-500/20 rounded-lg p-4 text-sm text-gray-400 space-y-2">
+            <p class="font-semibold text-green-400">📌 How it works:</p>
+            <ul class="list-disc list-inside space-y-1 ml-2">
+                <li>I'll remind you to code every 10 minutes</li>
+                <li>Click "Done! I Coded Today" when you've written code</li>
+                <li>Build a streak by coding every day</li>
+                <li>Keep this tab open and pinned for notifications</li>
+            </ul>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center text-sm text-gray-500">
+            <p>Made with 💚 by Bismark</p>
+            <p class="mt-1 text-xs">His mercies are new every morning 🌅</p>
+        </div>
+
+    </div>
 
     <script src="script.js"></script>
 </body>

@@ -1,6 +1,18 @@
 let reminderCount = 0;
 let hasCodedToday = false;
 let reminderInterval = null;
+let streak = parseInt(localStorage.getItem('codingStreak')) || 0;
+let lastCodedDate = localStorage.getItem('lastCodedDate') || null;
+
+//display streak when page loads
+const updateStreakDisplay = () => {
+    const streakDisplay = document.getElementById('streak-display');
+    if (streak > 0) {
+        streakDisplay.textContent = `🔥 ${streak} day streak!`;
+    } else {
+        streakDisplay.textContent = "Start your streak today!";
+    }
+}
 
 const showReminder = () => {
 //dont bother if they have coded today
@@ -41,6 +53,20 @@ const resetAtMidnight = () => {
     const TimeUntilMidnight = night.getTime() - now.getTime();
 
     setTimeout(() => {
+
+        //check if they coded yesterday
+        const today = new Date().toDateString();
+        const yesterday = new Date(Date.now() - 86400000). toDateString();
+
+        if (lastCodedDate !== yesterday && lastCodedDate !== today){
+            //streak broken
+            streak = 0;
+            localStorage.setItem("codingStreak", streak);
+            new Notification('Streak Broken!', {
+                body: "You didn't code yesterday. Start fresh today!"
+            });
+        }
+
         hasCodedToday = false;
         reminderCount = 0;
 
@@ -57,6 +83,9 @@ const resetAtMidnight = () => {
     new Notification("Good morning Bismark! ☀️", {
         body:"His mercies are new every morning, and so is your code today, you got this"
     })
+
+    // update display after midnight
+    updateStreakDisplay();
 
     resetAtMidnight(); //keep the cycle going forever with this inside call
     }, TimeUntilMidnight);
@@ -90,6 +119,29 @@ document.getElementById("notify-btn").addEventListener("click", ()=>{
 
 
 document.getElementById("done-btn").addEventListener("click", () => {
+
+       const today = new Date().toDateString();
+    
+    // Check if this is a new day
+    if (lastCodedDate !== today) {
+        const yesterday = new Date(Date.now() - 86400000).toDateString();
+        
+        if (lastCodedDate === yesterday) {
+            // Consecutive day - increase streak!
+            streak++;
+        } else if (lastCodedDate === null) {
+            // First time ever
+            streak = 1;
+        } else {
+            // Missed days - reset streak
+            streak = 1;
+        }
+        
+        localStorage.setItem('codingStreak', streak);
+        localStorage.setItem('lastCodedDate', today);
+        lastCodedDate = today;
+    }
+
     hasCodedToday = true;
     reminderCount = 0; //resets reminders to 0
 
@@ -99,13 +151,22 @@ document.getElementById("done-btn").addEventListener("click", () => {
     }
 
     //celebrate notification
-    new Notification("You did it!. I am proud of you Bismark!", {
+    let celebrationMessage = "You did it! I am proud of you Bismark! 🎉";
+    if (streak > 1) {
+        celebrationMessage = `🔥 ${streak} DAYS IN A ROW! You're on fire! 💪`;
+    }
+
+
+    new Notification(celebrationMessage, {
         body: "See you tomorrow for more coding"
     });
 
     //change the text in the button
     document.getElementById("done-btn").textContent = "✅ Coded Today!"
     document.getElementById("done-btn").disabled = true;
+
+       // update the display
+    updateStreakDisplay();
 })
 
 //AUTO Reminder after every 5 minutes
@@ -116,3 +177,4 @@ if(Notification.permission === "granted"){
 }
 
 resetAtMidnight(); // kick start the cycle
+updateStreakDisplay();
