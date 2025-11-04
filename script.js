@@ -4,6 +4,13 @@ let reminderInterval = null;
 let streak = parseInt(localStorage.getItem('codingStreak')) || 0;
 let lastCodedDate = localStorage.getItem('lastCodedDate') || null;
 
+//adding a notification sound
+const playNotificationSound = () => {
+    const audio = new Audio('notification-ding.mp3')
+    audio.volume = 0.3; //30% (0.0 - 1.0)
+    audio.play().catch(err => console.log("Error playing sound:", err));
+}
+
 //speak message
 const speakMessage = (message) => {
     if ('speechSynthesis' in window) {
@@ -64,11 +71,13 @@ const showReminder = () => {
    
     const notif = new Notification(message);
     speakMessage(message);
+    playNotificationSound();
 
      //setTimeout(function, delay)
     setTimeout(() => {
         notif.close()
     }, 3000);
+
 
 }
 
@@ -116,7 +125,7 @@ const resetAtMidnight = () => {
         body:"His mercies are new every morning, and so is your code today, you got this"
     })
     speakMessage("Good morning Bismark!, His mercies are new every morning, and so is your code today, you got this");
-
+    playNotificationSound();
     // update display after midnight
     updateStreakDisplay();
 
@@ -195,6 +204,7 @@ document.getElementById("done-btn").addEventListener("click", () => {
     });
 
     speakMessage(celebrationMessage);
+    playNotificationSound();
 
     //change the text in the button
     document.getElementById("done-btn").textContent = "✅ Coded Today!"
