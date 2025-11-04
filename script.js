@@ -4,6 +4,35 @@ let reminderInterval = null;
 let streak = parseInt(localStorage.getItem('codingStreak')) || 0;
 let lastCodedDate = localStorage.getItem('lastCodedDate') || null;
 
+//speak message
+const speakMessage = (message) => {
+    if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(message);
+        utterance.rate = 1.3; //speed 0.1 - 10
+        utterance.pitch = 0.6; //pitch 0 - 2
+        utterance.volume = 1.0; //volume 0 - 1
+
+//trying to get a range of voices
+const setVoice = () => {
+    const voices = speechSynthesis.getVoices();
+    if(voices.length > 0) {
+        utterance.voice = voices[2];
+        speechSynthesis.speak(utterance);
+
+    }
+}
+
+//making sure voices are loaded
+if(speechSynthesis.getVoices().length > 0){
+    setVoice();
+}else{
+    speechSynthesis.onvoiceschanged = setVoice
+}
+ 
+    }
+}
+
+
 //display streak when page loads
 const updateStreakDisplay = () => {
     const streakDisplay = document.getElementById('streak-display');
@@ -32,8 +61,11 @@ const showReminder = () => {
     } else if (reminderCount >= 5) {
         message = "Bismark, I'm not getting off your back, just 10mins come on!" +  reminderCount;
     }
-    //setTimeout(function, delay)
-    const notif = new Notification(message)
+   
+    const notif = new Notification(message);
+    speakMessage(message);
+
+     //setTimeout(function, delay)
     setTimeout(() => {
         notif.close()
     }, 3000);
@@ -83,6 +115,7 @@ const resetAtMidnight = () => {
     new Notification("Good morning Bismark! ☀️", {
         body:"His mercies are new every morning, and so is your code today, you got this"
     })
+    speakMessage("Good morning Bismark!, His mercies are new every morning, and so is your code today, you got this");
 
     // update display after midnight
     updateStreakDisplay();
@@ -160,6 +193,8 @@ document.getElementById("done-btn").addEventListener("click", () => {
     new Notification(celebrationMessage, {
         body: "See you tomorrow for more coding"
     });
+
+    speakMessage(celebrationMessage);
 
     //change the text in the button
     document.getElementById("done-btn").textContent = "✅ Coded Today!"
